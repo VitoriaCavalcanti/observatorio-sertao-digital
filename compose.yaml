@@ -1,4 +1,18 @@
 services:
+  frontend:
+    build:
+      context: ./frontend
+    container_name: observatorio_frontend
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+
   backend:
     build:
       context: ./backend
@@ -12,7 +26,7 @@ services:
     environment:
       DATABASE_URL: "postgresql://observatorio:observatorio@database:5432/observatorio?serverVersion=17&charset=utf8"
     depends_on:
-    
+
       - database
   database:
     image: postgres:17-alpine
