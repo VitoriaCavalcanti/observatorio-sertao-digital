@@ -29,6 +29,9 @@ class Indicador
     #[ORM\Column(nullable: true)]
     private ?int $anoReferencia = null;
 
+    #[ORM\ManyToOne(inversedBy: 'indicadores')]
+    private ?Projeto $projeto = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -90,6 +93,18 @@ class Indicador
     public function setAnoReferencia(?int $anoReferencia): static
     {
         $this->anoReferencia = $anoReferencia;
+
+        return $this;
+    }
+
+    public function getProjeto(): ?Projeto
+    {
+        return $this->projeto;
+    }
+
+    public function setProjeto(?Projeto $projeto): static
+    {
+        $this->projeto = $projeto;
 
         return $this;
     }
