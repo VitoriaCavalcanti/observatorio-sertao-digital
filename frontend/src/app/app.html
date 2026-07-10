@@ -1,99 +1,185 @@
 <main class="page">
-  <section class="hero">
-    <div>
-      <p class="eyebrow">Observatório Sertão Digital</p>
-      <h1>Painel inicial</h1>
-      <p class="subtitle">
-        Visão geral das instituições, projetos e indicadores cadastrados na plataforma.
-      </p>
-    </div>
-  </section>
-
-  @if (erro()) {
-    <section class="alert">
-      {{ erro() }}
-    </section>
-  }
+  <header class="hero">
+    <p class="eyebrow">Observatório Sertão Digital</p>
+    <h1>Painel inicial</h1>
+    <p>
+      Visão geral das instituições, projetos e indicadores cadastrados na plataforma.
+    </p>
+  </header>
 
   @if (carregando()) {
-    <section class="loading">
-      Carregando dados...
+    <section class="status-card">
+      <p>Carregando dados...</p>
     </section>
   } @else {
-    <section class="metrics">
-      <article>
+    @if (erro()) {
+      <section class="status-card error">
+        <p>{{ erro() }}</p>
+      </section>
+    }
+
+    <section class="summary-grid">
+      <article class="summary-card">
         <span>Instituições</span>
         <strong>{{ instituicoes().length }}</strong>
       </article>
 
-      <article>
+      <article class="summary-card">
         <span>Projetos</span>
         <strong>{{ projetos().length }}</strong>
       </article>
 
-      <article>
+      <article class="summary-card">
         <span>Indicadores</span>
         <strong>{{ indicadores().length }}</strong>
       </article>
     </section>
 
-    <section class="grid">
-      <div class="panel">
-        <header>
-          <h2>Instituições</h2>
-        </header>
+    <section class="form-section">
+      <div>
+        <p class="section-label">Cadastro</p>
+        <h2>Nova instituição</h2>
+      </div>
+
+      <form class="institution-form" (ngSubmit)="salvarInstituicao()">
+        <div class="form-grid">
+          <label>
+            Nome
+            <input
+              type="text"
+              name="nome"
+              [(ngModel)]="novaInstituicao.nome"
+              required
+            />
+          </label>
+
+          <label>
+            Sigla
+            <input
+              type="text"
+              name="sigla"
+              [(ngModel)]="novaInstituicao.sigla"
+            />
+          </label>
+
+          <label>
+            Tipo
+            <input
+              type="text"
+              name="tipo"
+              [(ngModel)]="novaInstituicao.tipo"
+            />
+          </label>
+
+          <label>
+            E-mail
+            <input
+              type="email"
+              name="email"
+              [(ngModel)]="novaInstituicao.email"
+            />
+          </label>
+
+          <label>
+            Site
+            <input
+              type="url"
+              name="site"
+              [(ngModel)]="novaInstituicao.site"
+            />
+          </label>
+
+          <label>
+            Município
+            <input
+              type="text"
+              name="municipio"
+              [(ngModel)]="novaInstituicao.municipio"
+            />
+          </label>
+
+          <label>
+            UF
+            <input
+              type="text"
+              name="uf"
+              maxlength="2"
+              [(ngModel)]="novaInstituicao.uf"
+            />
+          </label>
+        </div>
+
+        <button type="submit" [disabled]="salvandoInstituicao()">
+          {{ salvandoInstituicao() ? 'Salvando...' : 'Cadastrar instituição' }}
+        </button>
+
+        @if (mensagemInstituicao()) {
+          <p class="success-message">{{ mensagemInstituicao() }}</p>
+        }
+      </form>
+    </section>
+
+    <section class="content-grid">
+      <article class="content-card">
+        <h2>Instituições</h2>
 
         @if (instituicoes().length === 0) {
-          <p class="empty">Nenhuma instituição cadastrada.</p>
+          <p>Nenhuma instituição cadastrada.</p>
         } @else {
-          <ul class="list">
+          <ul>
             @for (instituicao of instituicoes(); track instituicao.id) {
               <li>
                 <strong>{{ instituicao.nome }}</strong>
-                <span>{{ instituicao.sigla || 'Sem sigla' }} · {{ instituicao.municipio || 'Município não informado' }}</span>
+                <span>
+                  {{ instituicao.sigla || 'Sem sigla' }}
+                  @if (instituicao.municipio || instituicao.uf) {
+                    - {{ instituicao.municipio }} {{ instituicao.uf }}
+                  }
+                </span>
               </li>
             }
           </ul>
         }
-      </div>
+      </article>
 
-      <div class="panel">
-        <header>
-          <h2>Projetos</h2>
-        </header>
+      <article class="content-card">
+        <h2>Projetos</h2>
 
         @if (projetos().length === 0) {
-          <p class="empty">Nenhum projeto cadastrado.</p>
+          <p>Nenhum projeto cadastrado.</p>
         } @else {
-          <ul class="list">
+          <ul>
             @for (projeto of projetos(); track projeto.id) {
               <li>
                 <strong>{{ projeto.titulo }}</strong>
-                <span>{{ projeto.status || 'Sem status' }} · {{ projeto.instituicao?.nome || 'Sem instituição' }}</span>
+                <span>{{ projeto.status || 'Sem status' }}</span>
               </li>
             }
           </ul>
         }
-      </div>
+      </article>
 
-      <div class="panel">
-        <header>
-          <h2>Indicadores</h2>
-        </header>
+      <article class="content-card">
+        <h2>Indicadores</h2>
 
         @if (indicadores().length === 0) {
-          <p class="empty">Nenhum indicador cadastrado.</p>
+          <p>Nenhum indicador cadastrado.</p>
         } @else {
-          <ul class="list">
+          <ul>
             @for (indicador of indicadores(); track indicador.id) {
               <li>
                 <strong>{{ indicador.nome }}</strong>
-                <span>{{ indicador.valor ?? 'Sem valor' }} {{ indicador.unidade || '' }} · {{ indicador.anoReferencia || 'Sem ano' }}</span>
+                <span>
+                  {{ indicador.valor }} {{ indicador.unidade }}
+                  @if (indicador.anoReferencia) {
+                    - {{ indicador.anoReferencia }}
+                  }
+                </span>
               </li>
             }
           </ul>
         }
-      </div>
+      </article>
     </section>
   }
 </main>
