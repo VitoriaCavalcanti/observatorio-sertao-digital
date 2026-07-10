@@ -1,1 +1,259 @@
-/* You can add global styles to this file, and also import other style files */
+ *{
+  box-sizing: border-box;
+}
+
+body {
+  background: #f3f7f4;
+  color: #10251b;
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+}
+
+.page {
+  margin: 0 auto;
+  max-width: 1400px;
+  min-height: 100vh;
+  padding: 70px 48px;
+}
+
+.hero {
+  align-items: center;
+  display: grid;
+  gap: 28px;
+  grid-template-columns: 220px 1fr 1fr;
+  margin-bottom: 42px;
+}
+
+.eyebrow,
+.section-label {
+  color: #147c46;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  line-height: 1;
+  margin: 0;
+}
+
+.hero p:last-child {
+  color: #31483b;
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.status-card,
+.summary-card,
+.content-card,
+.form-section {
+  background: #ffffff;
+  border: 1px solid #d7e5dc;
+  border-radius: 8px;
+  box-shadow: 0 18px 50px rgba(15, 53, 38, 0.08);
+}
+
+.status-card {
+  padding: 22px;
+}
+
+.status-card.error {
+  border-color: #f0b8b8;
+  color: #8f1d1d;
+}
+
+.summary-grid,
+.content-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.summary-grid {
+  margin-bottom: 30px;
+}
+
+.summary-card {
+  display: grid;
+  gap: 12px;
+  min-height: 110px;
+  padding: 26px;
+}
+
+.summary-card span {
+  color: #486055;
+}
+
+.summary-card strong {
+  font-size: 2.2rem;
+}
+
+.form-section {
+  margin: 0 0 30px;
+  padding: 24px;
+}
+
+.form-section h2,
+.content-card h2 {
+  margin: 6px 0 0;
+}
+
+.institution-form {
+  margin-top: 20px;
+}
+
+.form-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.institution-form label {
+  color: #40564a;
+  display: grid;
+  font-size: 0.92rem;
+  font-weight: 700;
+  gap: 8px;
+}
+
+.institution-form input {
+  border: 1px solid #c9d9cf;
+  border-radius: 6px;
+  color: #10251b;
+  font: inherit;
+  padding: 12px 14px;
+}
+
+.institution-form input:focus {
+  border-color: #147c46;
+  box-shadow: 0 0 0 3px rgba(20, 124, 70, 0.14);
+  outline: none;
+}
+
+.institution-form button {
+  background: #147c46;
+  border: 0;
+  border-radius: 6px;
+  color: #ffffff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+  margin-top: 18px;
+  padding: 12px 18px;
+}
+
+.institution-form button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.success-message {
+  color: #147c46;
+  font-weight: 700;
+  margin: 14px 0 0;
+}
+
+.content-card {
+  min-height: 310px;
+  padding: 24px;
+}
+
+.content-card p {
+  color: #607368;
+}
+
+.content-card ul {
+  display: grid;
+  gap: 14px;
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+}
+
+.content-card li {
+  border-top: 1px solid #e0ebe4;
+  display: grid;
+  gap: 4px;
+  padding-top: 14px;
+}
+
+.content-card li span {
+  color: #607368;
+}
+
+@media (max-width: 900px) {
+  .page {
+    padding: 40px 20px;
+  }
+
+  .hero,
+  .summary-grid,
+  .content-grid,
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+    .summary-grid {
+  display: grid !important;
+  gap: 24px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 30px;
+}
+
+.summary-card,
+.content-card,
+.form-section {
+  background: #ffffff;
+  border: 1px solid #d7e5dc;
+  border-radius: 8px;
+  box-shadow: 0 18px 50px rgba(15, 53, 38, 0.08);
+}
+
+.summary-card {
+  display: grid;
+  gap: 12px;
+  min-height: 110px;
+  padding: 26px;
+}
+
+.summary-card span {
+  color: #486055;
+}
+
+.summary-card strong {
+  display: block;
+  font-size: 2.2rem;
+}
+
+.form-section {
+  margin: 0 0 30px;
+  padding: 24px;
+}
+
+.form-grid {
+  display: grid !important;
+  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.content-grid {
+  display: grid !important;
+  gap: 24px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.content-card {
+  min-height: 310px;
+  padding: 24px;
+}
+
+@media (max-width: 900px) {
+  .summary-grid,
+  .content-grid,
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+}

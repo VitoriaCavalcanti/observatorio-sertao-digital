@@ -59,4 +59,9 @@ export class Observatorio {
   listarIndicadores(): Observable<Indicador[]> {
     return this.http.get<Indicador[]>(`${this.apiUrl}/indicadores`);
   }
+
+  criarInstituicao(dados: Omit<Instituicao, 'id'>): Observable<Instituicao> {
+  return this.http.post<Instituicao>(`${this.apiUrl}/instituicoes`, dados);
+}
+
 }
