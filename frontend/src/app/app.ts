@@ -20,7 +20,7 @@ export class App implements OnInit {
     this.carregarDados();
   }
 
-  private carregarDados(): void {
+    private carregarDados(): void {
     this.carregando.set(true);
     this.erro.set(null);
 
@@ -35,14 +35,10 @@ export class App implements OnInit {
     });
 
     this.observatorio.listarIndicadores().subscribe({
-      next: (dados) => {
-        this.indicadores.set(dados);
-        this.carregando.set(false);
-      },
-      error: () => {
-        this.erro.set('Não foi possível carregar os indicadores.');
-        this.carregando.set(false);
-      }
+      next: (dados) => this.indicadores.set(dados),
+      error: () => this.erro.set('Não foi possível carregar os indicadores.')
     });
+
+    this.carregando.set(false);
   }
 }
