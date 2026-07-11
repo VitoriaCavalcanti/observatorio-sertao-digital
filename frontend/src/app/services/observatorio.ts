@@ -62,6 +62,9 @@ export class Observatorio {
 
   criarInstituicao(dados: Omit<Instituicao, 'id'>): Observable<Instituicao> {
   return this.http.post<Instituicao>(`${this.apiUrl}/instituicoes`, dados);
-}
+  }
 
+criarProjeto(dados: Omit<Projeto, 'id'>): Observable<Projeto> {
+  return this.http.post<Projeto>(`${this.apiUrl}/projetos`, dados);
+  }
 }

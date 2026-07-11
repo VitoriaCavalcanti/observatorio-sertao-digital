@@ -28,6 +28,18 @@ export class App implements OnInit {
   protected salvandoInstituicao = signal(false);
   protected mensagemInstituicao = signal<string | null>(null);
 
+  protected novoProjeto = {
+  titulo: '',
+  resumo: '',
+  status: '',
+  dataInicio: '',
+  dataFim: '',
+  instituicaoId: null as number | null
+};
+
+protected salvandoProjeto = signal(false);
+protected mensagemProjeto = signal<string | null>(null);
+
   constructor(private readonly observatorio: Observatorio) {}
 
   ngOnInit(): void {
@@ -82,4 +94,30 @@ export class App implements OnInit {
       }
     });
   }
+
+  protected salvarProjeto(): void {
+  this.salvandoProjeto.set(true);
+  this.mensagemProjeto.set(null);
+  this.erro.set(null);
+
+  this.observatorio.criarProjeto(this.novoProjeto).subscribe({
+    next: (projeto) => {
+      this.projetos.update((atuais) => [...atuais, projeto]);
+      this.novoProjeto = {
+        titulo: '',
+        resumo: '',
+        status: '',
+        dataInicio: '',
+        dataFim: '',
+        instituicaoId: null
+      };
+      this.mensagemProjeto.set('Projeto cadastrado com sucesso.');
+      this.salvandoProjeto.set(false);
+    },
+    error: () => {
+      this.erro.set('Não foi possível cadastrar o projeto.');
+      this.salvandoProjeto.set(false);
+    }
+  });
+}
 }
