@@ -1,0 +1,7 @@
+{% extends 'base.html.twig' %}
+{% block title %}Painel administrativo{% endblock %}
+{% block body %}
+<div class="page-head"><div><p class="eyebrow">GESTÃO DE DADOS</p><h1>Painel administrativo</h1><p>Revise e mantenha os dados publicados pelo Observatório.</p></div><a class="primary button" href="{{ path('admin_post_new') }}">Novo aviso</a></div>
+<div class="cards">{% for nome, total in contagens %}<article class="card"><span>{{ nome }}</span><strong>{{ total }}</strong></article>{% endfor %}</div>
+<section class="panel"><h2>Acesso rápido</h2><div class="actions"><a href="{{ path('admin_data_index', {tipo:'instituicoes'}) }}">Gerenciar instituições</a><a href="{{ path('admin_data_index', {tipo:'projetos'}) }}">Gerenciar projetos</a><a href="{{ path('admin_data_index', {tipo:'indicadores'}) }}">Gerenciar indicadores</a><a href="{{ path('admin_post_index') }}">Central de avisos</a></div></section>
+{% endblock %}

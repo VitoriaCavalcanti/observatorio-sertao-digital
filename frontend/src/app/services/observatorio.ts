@@ -2,69 +2,17 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-export interface Instituicao {
-  id: number;
-  nome: string;
-  sigla?: string | null;
-  tipo?: string | null;
-  email?: string | null;
-  site?: string | null;
-  municipio?: string | null;
-  uf?: string | null;
-}
+export interface Instituicao { id: number; nome: string; sigla?: string | null; tipo?: string | null; email?: string | null; site?: string | null; municipio?: string | null; uf?: string | null; }
+export interface Projeto { id: number; titulo: string; resumo?: string | null; status?: string | null; dataInicio?: string | null; dataFim?: string | null; instituicao?: { id: number; nome: string; sigla?: string | null } | null; }
+export interface Indicador { id: number; nome: string; descricao?: string | null; unidade?: string | null; valor?: number | null; anoReferencia?: number | null; projeto?: { id: number; titulo: string } | null; }
+export interface Aviso { id: number; titulo: string; slug: string; resumo: string; fixado: boolean; prioridade: number; publicadoEm?: string | null; autor?: string | null; }
 
-export interface Projeto {
-  id: number;
-  titulo: string;
-  resumo?: string | null;
-  status?: string | null;
-  dataInicio?: string | null;
-  dataFim?: string | null;
-  instituicao?: {
-    id: number;
-    nome: string;
-    sigla?: string | null;
-  } | null;
-}
-
-export interface Indicador {
-  id: number;
-  nome: string;
-  descricao?: string | null;
-  unidade?: string | null;
-  valor?: number | null;
-  anoReferencia?: number | null;
-  projeto?: {
-    id: number;
-    titulo: string;
-  } | null;
-}
-
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class Observatorio {
-  private readonly apiUrl = 'http://localhost:8000/api';
-
+  private readonly apiUrl = '/api';
   constructor(private readonly http: HttpClient) {}
-
-  listarInstituicoes(): Observable<Instituicao[]> {
-    return this.http.get<Instituicao[]>(`${this.apiUrl}/instituicoes`);
-  }
-
-  listarProjetos(): Observable<Projeto[]> {
-    return this.http.get<Projeto[]>(`${this.apiUrl}/projetos`);
-  }
-
-  listarIndicadores(): Observable<Indicador[]> {
-    return this.http.get<Indicador[]>(`${this.apiUrl}/indicadores`);
-  }
-
-  criarInstituicao(dados: Omit<Instituicao, 'id'>): Observable<Instituicao> {
-  return this.http.post<Instituicao>(`${this.apiUrl}/instituicoes`, dados);
-  }
-
-criarProjeto(dados: Omit<Projeto, 'id'>): Observable<Projeto> {
-  return this.http.post<Projeto>(`${this.apiUrl}/projetos`, dados);
-  }
+  listarInstituicoes(): Observable<Instituicao[]> { return this.http.get<Instituicao[]>(`${this.apiUrl}/instituicoes`); }
+  listarProjetos(): Observable<Projeto[]> { return this.http.get<Projeto[]>(`${this.apiUrl}/projetos`); }
+  listarIndicadores(): Observable<Indicador[]> { return this.http.get<Indicador[]>(`${this.apiUrl}/indicadores`); }
+  listarAvisos(): Observable<Aviso[]> { return this.http.get<Aviso[]>(`${this.apiUrl}/avisos`); }
 }

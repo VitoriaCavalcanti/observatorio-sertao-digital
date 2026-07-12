@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{% block title %}Entrar | Administração{% endblock %}
+{% block body %}
+<section class="login-card">
+    <p class="eyebrow">ADMINISTRAÇÃO</p><h1>Entrar no Observatório</h1><p>Área reservada para tratamento, manutenção e correção dos dados.</p>
+    {% if error %}<div class="alert error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>{% endif %}
+    <form action="{{ path('security_login') }}" method="post" class="stack">
+        <label>E-mail<input type="email" name="_username" value="{{ last_username }}" required autofocus></label>
+        <label>Senha<input type="password" name="_password" required></label>
+        <label class="check"><input type="checkbox" name="_remember_me" checked> Manter conectado</label>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        <button class="primary">Entrar</button>
+    </form>
+</section>
+{% endblock %}

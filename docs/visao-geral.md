@@ -1,53 +1,27 @@
-# Visão Geral do Projeto
+# Visão geral
 
-## Nome
+O Observatório Sertão Digital centraliza iniciativas, instituições, indicadores, documentos e evidências que apoiam pesquisa, gestão e tomada de decisão no Sertão.
 
-Observatório Sertão Digital
+## Públicos
 
-## Propósito
+- Comunidade e pesquisadores consultam o portal Angular.
+- Equipes técnicas corrigem e mantêm registros pelo painel Symfony.
+- Editores publicam comunicados pela central de avisos.
+- Administradores controlam operações sensíveis e usuários.
 
-O Observatório Sertão Digital é uma plataforma web para reunir, organizar, consultar e analisar informações estratégicas sobre o território, iniciativas, instituições, indicadores, documentos e atores relacionados ao desenvolvimento digital do Sertão.
+## Funcionalidades implementadas
 
-## Problema que o sistema busca resolver
+- Consulta pública de instituições, projetos e indicadores.
+- CRUD administrativo dos três recursos.
+- Login persistido no PostgreSQL.
+- Papéis de usuário, editor e administrador.
+- Central de avisos internos e públicos baseada em Posts.
+- API com leitura pública e escrita protegida.
+- Roteamento local por nomes com Traefik.
 
-Atualmente, informações importantes sobre iniciativas, dados, projetos, instituições e evidências podem estar espalhadas em documentos, planilhas, relatórios ou registros informais.
+## Evoluções previstas
 
-O sistema busca centralizar essas informações em uma plataforma única, permitindo consulta, cadastro, busca, análise e apoio à tomada de decisão.
-
-## Público-alvo
-
-- Gestores e equipes técnicas
-- Pesquisadores
-- Instituições parceiras
-- Comunidade acadêmica
-- Pessoas envolvidas em projetos de desenvolvimento regional e digital
-
-## Funcionalidades previstas
-
-- Cadastro de instituições
-- Cadastro de iniciativas e projetos
-- Cadastro de documentos e evidências
-- Cadastro de indicadores
-- Cadastro de territórios/localidades
-- Busca textual com Meilisearch
-- Painéis de visualização
-- API para consumo dos dados
-- Possível integração futura com IA local usando Ollama e OpenWebUI
-
-## Tecnologias principais
-
-- Symfony no backend
-- Angular no frontend
-- PostgreSQL como banco de dados
-- Meilisearch para busca
-- Docker para ambiente
-- Ollama e OpenWebUI como possibilidade futura de IA
-
-## Organização inicial
-
-O projeto está dividido em três áreas principais:
-
-```text
-backend/
-frontend/
-docs/
+- Auditoria detalhada de alterações.
+- Integração efetiva dos dados com Meilisearch.
+- Documentos, territórios, atores e evidências.
+- Dashboards analíticos e integrações de IA local.

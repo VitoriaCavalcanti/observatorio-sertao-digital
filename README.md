@@ -1,49 +1,25 @@
 # Observatório Sertão Digital
 
-Sistema web para organização, consulta e análise de informações estratégicas sobre o ecossistema digital, econômico, educacional e territorial do Sertão.
+Plataforma para reunir, revisar e publicar instituições, projetos, indicadores e avisos relacionados ao ecossistema digital do Sertão.
 
-## Objetivo
+## Aplicações
 
-O projeto tem como objetivo criar uma plataforma de observatório digital capaz de reunir dados, documentos, indicadores, atores, iniciativas e evidências para apoiar análise, tomada de decisão e produção de conhecimento.
+- **Portal público Angular:** `http://observatorio.localhost`
+- **Administração Symfony:** `http://admin.observatorio.localhost`
+- **API:** `http://api.observatorio.localhost` ou `/api` no portal
+- **Meilisearch:** `http://busca.observatorio.localhost`
+- **Traefik:** `http://traefik.observatorio.localhost`
 
-## Tecnologias
+O backend segue os padrões do [Symfony Demo](https://github.com/symfony/demo): autenticação pelo Security Bundle, controllers com atributos, formulários Twig, papéis hierárquicos e uma central de avisos derivada da estrutura de Posts.
 
-### Backend
+## Início rápido
 
-- PHP
-- Symfony
-- Composer
+```powershell
+docker compose up -d --build
+docker compose exec backend php bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec backend php bin/console app:create-admin admin@observatorio.local senha-segura "Administrador"
+```
 
-### Frontend
+Em instalações com o executável legado, substitua `docker compose` por `docker-compose`.
 
-- Angular
-- TypeScript
-- SCSS
-
-### Banco de dados
-
-- PostgreSQL
-
-### Busca
-
-- Meilisearch
-
-### Ambiente e deploy
-
-- Docker
-- Docker Compose
-- WSL 2
-
-### IA futura
-
-- Ollama
-- OpenWebUI
-
-## Estrutura do projeto
-
-```text
-observatorio-sertao-digital/
-├── backend/   # API e regras de negócio em Symfony
-├── frontend/  # Interface web em Angular
-├── docs/      # Documentação do projeto
-└── README.md
+Mais informações em [docs/como-rodar.md](docs/como-rodar.md), [docs/arquitetura.md](docs/arquitetura.md), [docs/api.md](docs/api.md) e [docs/autenticacao.md](docs/autenticacao.md).
