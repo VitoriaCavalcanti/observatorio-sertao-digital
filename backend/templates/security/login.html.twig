@@ -1,15 +1,22 @@
 {% extends 'base.html.twig' %}
-{% block title %}Entrar | Administração{% endblock %}
-{% block body %}
-<section class="login-card">
-    <p class="eyebrow">ADMINISTRAÇÃO</p><h1>Entrar no Observatório</h1><p>Área reservada para tratamento, manutenção e correção dos dados.</p>
-    {% if error %}<div class="alert error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>{% endif %}
-    <form action="{{ path('security_login') }}" method="post" class="stack">
-        <label>E-mail<input type="email" name="_username" value="{{ last_username }}" required autofocus></label>
-        <label>Senha<input type="password" name="_password" required></label>
-        <label class="check"><input type="checkbox" name="_remember_me" checked> Manter conectado</label>
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-        <button class="primary">Entrar</button>
-    </form>
-</section>
+{% block title %}Entrar | Observatório Sertão Digital{% endblock %}
+{% block body_id 'login' %}
+{% block main %}
+{% if error %}<div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>{% endif %}
+<div class="row">
+  <div class="col-sm-7">
+    <div class="well">
+      <form action="{{ path('security_login') }}" method="post">
+        <fieldset><legend><twig:ux:icon name="tabler:lock"/> Administração</legend>
+          <div class="mb-3"><label class="form-label" for="username">E-mail</label><input class="form-control" id="username" name="_username" required type="email" value="{{ last_username }}" autofocus></div>
+          <div class="mb-3"><label class="form-label" for="password">Senha</label><input class="form-control" id="password" name="_password" required type="password"></div>
+          <div class="mb-3 form-check"><input class="form-check-input" id="remember_me" name="_remember_me" type="checkbox" checked><label class="form-check-label" for="remember_me">Manter conectado</label></div>
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+          <button type="submit" class="btn btn-primary"><twig:ux:icon name="tabler:login"/> Entrar</button>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+  <div class="col-sm-5"><h3><twig:ux:icon name="tabler:arrow-left"/> Área interna</h3><p>Use sua conta para tratar, manter e corrigir os dados do Sertão Digital.</p><div class="card"><div class="card-body"><span class="badge text-bg-info">Nota</span><p class="card-text mt-2">O primeiro administrador é criado pelo comando <code>app:create-admin</code>.</p></div></div></div>
+</div>
 {% endblock %}

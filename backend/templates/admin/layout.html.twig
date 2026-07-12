@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+{% block importmap %}{{ importmap(['app', 'admin']) }}{% endblock %}
+{% block header_navigation_links %}
+<li class="nav-item"><a class="nav-link" href="{{ path('admin_dashboard') }}"><twig:ux:icon name="tabler:home"/> Painel</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ path('admin_post_index') }}"><twig:ux:icon name="tabler:messages"/> Avisos</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ path('admin_data_index',{tipo:'instituicoes'}) }}"><twig:ux:icon name="tabler:list"/> Instituições</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ path('admin_data_index',{tipo:'projetos'}) }}">Projetos</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ path('admin_data_index',{tipo:'indicadores'}) }}">Indicadores</a></li>
+{% if is_granted('ROLE_ADMIN') %}<li class="nav-item"><a class="nav-link" href="{{ path('admin_user_index') }}"><twig:ux:icon name="tabler:users-group"/> Usuários</a></li>{% endif %}
+<li class="nav-item"><a class="nav-link" href="{{ path('homepage') }}"><twig:ux:icon name="tabler:arrow-left"/> Voltar ao site</a></li>
+{% endblock %}

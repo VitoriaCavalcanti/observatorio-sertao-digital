@@ -1,0 +1,4 @@
+<?php
+namespace App\Controller;
+use App\Entity\Post;use App\Repository\PostRepository;use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;use Symfony\Component\HttpFoundation\Response;use Symfony\Component\Routing\Attribute\Route;
+#[Route('/avisos')]final class AvisoController extends AbstractController{#[Route('',name:'aviso_index',methods:['GET'])]public function index(PostRepository $r):Response{return$this->render('aviso/index.html.twig',['posts'=>$r->findPublicados()]);}#[Route('/{slug}',name:'aviso_show',methods:['GET'])]public function show(string $slug,PostRepository $r):Response{$post=$r->findOneBy(['slug'=>$slug,'publico'=>true,'status'=>Post::STATUS_PUBLICADO]);if(!$post)throw$this->createNotFoundException();return$this->render('aviso/show.html.twig',['post'=>$post]);}}

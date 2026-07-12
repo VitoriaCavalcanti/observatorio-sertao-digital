@@ -27,7 +27,7 @@ O Traefik resolve os nomes HTTP e encaminha cada requisição para a porta inter
 
 ## Padrões do Symfony Demo
 
-Foram adotados `User` persistido pelo Doctrine, login via formulário com CSRF, remember-me, hierarquia de papéis, formulários Symfony, flash messages, controllers administrativos e o modelo de Post. O Post foi especializado como aviso, com status, visibilidade, fixação, prioridade, autor e datas.
+O Symfony Demo é a base navegável do backend, incluindo homepage, herança de templates, Bootstrap/Bootswatch, AssetMapper/importmap, Sass, UX Icons, Stimulus, layout administrativo, `User` persistido pelo Doctrine, login via formulário com CSRF, remember-me, hierarquia de papéis, formulários Symfony, flash messages e o modelo de Post. O Post foi especializado como aviso, com status, visibilidade, fixação, prioridade, autor e datas.
 
 ## Domínio
 

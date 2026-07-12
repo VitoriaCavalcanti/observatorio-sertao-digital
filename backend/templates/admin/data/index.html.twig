@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/layout.html.twig' %}
 {% block title %}Gerenciar {{ tipo }}{% endblock %}
 {% block body %}
 <div class="page-head"><div><p class="eyebrow">MANUTENÇÃO DE DADOS</p><h1>{{ tipo|capitalize }}</h1><p>Cadastre, revise e corrija os registros do Observatório.</p></div><a class="primary button" href="{{ path('admin_data_new', {tipo:tipo}) }}">Novo registro</a></div>

@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+{% block title %}Observatório Sertão Digital{% endblock %}
+{% block body_id 'homepage' %}
+{% block header %}{% endblock %}{% block footer %}{% endblock %}
+{% block body %}
+<div class="page-header"><h1><span>Bem-vindo ao</span><br>Observatório Sertão Digital</h1><p class="lead">Backend estruturado sobre a aplicação oficial Symfony Demo.</p></div>
+<div class="row g-4">
+  <div class="col-sm"><div class="bg-body-tertiary px-3 py-5 rounded-3"><p class="fs-4">Consulte os avisos e comunicados publicados pelo Observatório.</p><a class="btn btn-primary btn-lg" href="{{ path('aviso_index') }}"><twig:ux:icon name="tabler:messages"/> Ver avisos</a></div></div>
+  <div class="col-sm"><div class="bg-body-tertiary px-3 py-5 rounded-3"><p class="fs-4">Acesse o backend para tratar, manter e corrigir os dados.</p><a class="btn btn-primary btn-lg" href="{{ path('admin_dashboard') }}"><twig:ux:icon name="tabler:lock"/> Administração</a></div></div>
+</div>
+{% endblock %}

@@ -1,22 +1,48 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="view-transition" content="same-origin">
     <title>{% block title %}Observatório Sertão Digital{% endblock %}</title>
-    {% block stylesheets %}<link rel="stylesheet" href="{{ asset('styles/app.css') }}">{% endblock %}
+    <link rel="shortcut icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    {% block stylesheets %}{% endblock %}
+    {% block javascripts %}{% block importmap %}{{ importmap('app') }}{% endblock %}{% endblock %}
 </head>
-<body>
-<header class="topbar">
-    <a class="brand" href="{{ path('admin_dashboard') }}">Observatório <strong>Sertão Digital</strong></a>
-    {% if app.user %}
-        <nav><a href="{{ path('admin_dashboard') }}">Painel</a><a href="{{ path('admin_post_index') }}">Avisos</a><a href="{{ path('admin_data_index', {tipo: 'instituicoes'}) }}">Instituições</a><a href="{{ path('admin_data_index', {tipo: 'projetos'}) }}">Projetos</a><a href="{{ path('admin_data_index', {tipo: 'indicadores'}) }}">Indicadores</a>{% if is_granted('ROLE_ADMIN') %}<a href="{{ path('admin_user_index') }}">Usuários</a>{% endif %}</nav>
-        <div class="user">{{ app.user.nome }}<form action="{{ path('security_logout') }}" method="post"><input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}"><button>Sair</button></form></div>
-    {% endif %}
-</header>
-<main class="container">
-    {% for type, messages in app.flashes %}{% for message in messages %}<div class="alert {{ type }}">{{ message }}</div>{% endfor %}{% endfor %}
-    {% block body %}{% endblock %}
-</main>
+<body id="{% block body_id %}{% endblock %}">
+{% block header %}
+    {% set rota = app.current_route %}
+    <header>
+        <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="{{ path('homepage') }}">Observatório Sertão Digital</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#appNavbar"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="appNavbar">
+                    <ul class="navbar-nav me-auto">
+                        {% block header_navigation_links %}
+                            <li class="nav-item"><a class="nav-link {{ rota == 'homepage' ? 'active' }}" href="{{ path('homepage') }}"><twig:ux:icon name="tabler:home"/> Início</a></li>
+                            <li class="nav-item"><a class="nav-link {{ rota starts with 'aviso_' ? 'active' }}" href="{{ path('aviso_index') }}"><twig:ux:icon name="tabler:messages"/> Avisos</a></li>
+                            <li class="nav-item"><a class="nav-link" href="http://observatorio.localhost"><twig:ux:icon name="tabler:world"/> Portal público</a></li>
+                            {% if is_granted('ROLE_EDITOR') %}<li class="nav-item"><a class="nav-link" href="{{ path('admin_dashboard') }}"><twig:ux:icon name="tabler:lock"/> Administração</a></li>{% endif %}
+                        {% endblock %}
+                    </ul>
+                    <ul class="navbar-nav">
+                    {% if app.user %}
+                        <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><twig:ux:icon name="tabler:user"/> {{ app.user.nome }}</a><ul class="dropdown-menu dropdown-menu-end"><li><a class="dropdown-item" href="{{ path('admin_dashboard') }}">Painel</a></li><li><hr class="dropdown-divider"></li><li><form action="{{ path('security_logout') }}" method="post"><input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}"><button class="dropdown-item">Sair</button></form></li></ul></li>
+                    {% else %}<li class="nav-item"><a class="nav-link" href="{{ path('security_login') }}"><twig:ux:icon name="tabler:login"/> Entrar</a></li>{% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+{% endblock %}
+
+<div class="container body-container">
+{% block body %}
+    <div class="row"><main id="main" class="col-sm-9">{% for type, messages in app.flashes %}{% for message in messages %}<div class="alert alert-{{ type == 'error' ? 'danger' : type }}">{{ message }}</div>{% endfor %}{% endfor %}{% block main %}{% endblock %}</main><aside id="sidebar" class="col-sm-3">{% block sidebar %}<div class="section about"><div class="well well-lg"><p>Plataforma para organização, revisão e publicação de dados estratégicos do Sertão.</p></div></div>{% endblock %}</aside></div>
+{% endblock %}
+</div>
+
+{% block footer %}<footer><div class="container"><div class="row"><div class="col-md-8"><p>&copy; {{ 'now'|date('Y') }} Observatório Sertão Digital</p><p>Construído sobre a estrutura oficial do Symfony Demo.</p></div><div class="col-md-4 text-end"><twig:ux:icon name="tabler:code"/> Symfony 8.1</div></div></div></footer>{% endblock %}
 </body>
 </html>

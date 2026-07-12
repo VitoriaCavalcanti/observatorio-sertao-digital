@@ -1,10 +1,17 @@
 import './stimulus_bootstrap.js';
-/*
- * Welcome to your app's main JavaScript file!
- *
- * This file will be included onto the page via the importmap() Twig function,
- * which should already be in your base.html.twig.
- */
-import './styles/app.css';
+// start the Stimulus application
+import './styles/app.scss';
+import 'highlight.js/styles/github-dark-dimmed.css';
+import 'lato-font/css/lato-font.css';
 
-console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
+// loads the Bootstrap plugins
+import 'bootstrap';
+
+// loads the code syntax highlighting library
+import './js/highlight.js';
+
+// Creates links to the Symfony documentation
+import './js/doclinks.js';
+
+import './js/flatpicker.js';
+

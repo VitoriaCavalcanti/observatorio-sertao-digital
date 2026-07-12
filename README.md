@@ -10,7 +10,7 @@ Plataforma para reunir, revisar e publicar instituições, projetos, indicadores
 - **Meilisearch:** `http://busca.observatorio.localhost`
 - **Traefik:** `http://traefik.observatorio.localhost`
 
-O backend segue os padrões do [Symfony Demo](https://github.com/symfony/demo): autenticação pelo Security Bundle, controllers com atributos, formulários Twig, papéis hierárquicos e uma central de avisos derivada da estrutura de Posts.
+O backend usa o [Symfony Demo](https://github.com/symfony/demo) como aplicação-base: homepage própria, Bootstrap/Bootswatch, AssetMapper, Sass, UX Icons, Stimulus, layouts público e administrativo, autenticação pelo Security Bundle, formulários Twig e uma central de avisos derivada da estrutura de Posts. Ao abrir `http://api.observatorio.localhost`, a homepage do Observatório substitui o placeholder padrão do Symfony.
 
 ## Início rápido
 
