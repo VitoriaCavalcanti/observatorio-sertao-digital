@@ -1,0 +1,7 @@
+{% extends 'admin/layout.html.twig' %}
+{% block title %}Gerenciar {{ tipo }}{% endblock %}
+{% block body %}
+<div class="page-head"><div><p class="eyebrow">MANUTENÇÃO DE DADOS</p><h1>{{ tipo|capitalize }}</h1><p>Cadastre, revise e corrija os registros do Observatório.</p></div><a class="primary button" href="{{ path('admin_data_new', {tipo:tipo}) }}">Novo registro</a></div>
+<div class="panel table-wrap"><table><thead><tr><th>ID</th><th>Registro</th><th>Detalhes</th><th></th></tr></thead><tbody>
+{% for item in itens %}<tr><td>{{ item.id }}</td><td><strong>{{ tipo == 'projetos' ? item.titulo : item.nome }}</strong></td><td>{% if tipo == 'instituicoes' %}{{ item.sigla }} · {{ item.municipio }}/{{ item.uf }}{% elseif tipo == 'projetos' %}{{ item.status }} · {{ item.instituicao ? item.instituicao.nome : 'Sem instituição' }}{% else %}{{ item.valor }} {{ item.unidade }} · {{ item.anoReferencia }}{% endif %}</td><td><a href="{{ path('admin_data_edit', {tipo:tipo,id:item.id}) }}">Editar</a></td></tr>{% else %}<tr><td colspan="4">Nenhum registro cadastrado.</td></tr>{% endfor %}
+</tbody></table></div>{% endblock %}

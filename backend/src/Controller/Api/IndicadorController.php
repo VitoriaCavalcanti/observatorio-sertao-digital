@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controller\Api;
 
 use App\Entity\Indicador;
@@ -14,79 +13,12 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/api/indicadores')]
 final class IndicadorController extends AbstractController
 {
-    #[Route('', name: 'api_indicador_index', methods: ['GET'])]
-    public function index(IndicadorRepository $indicadorRepository): JsonResponse
-    {
-        $indicadores = $indicadorRepository->findAll();
-
-        $dados = array_map(function (Indicador $indicador) {
-            return [
-                'id' => $indicador->getId(),
-                'nome' => $indicador->getNome(),
-                'descricao' => $indicador->getDescricao(),
-                'unidadeMedida' => $indicador->getUnidade(),
-                'valor' => $indicador->getValor(),
-                'dataReferencia' => $indicador->getDataReferencia()?->format('Y-m-d'),
-                'projeto' => $indicador->getProjeto() ? [
-                    'id' => $indicador->getProjeto()->getId(),
-                    'titulo' => $indicador->getProjeto()->getTitulo(),
-                ] : null,
-            ];
-        }, $indicadores);
-
-        return $this->json($dados);
-    }
-
-    #[Route('', name: 'api_indicador_create', methods: ['POST'])]
-    public function create(
-        Request $request,
-        EntityManagerInterface $entityManager,
-        ProjetoRepository $projetoRepository
-    ): JsonResponse {
-        $dados = json_decode($request->getContent(), true);
-
-        if (!is_array($dados) || empty($dados['nome'])) {
-            return $this->json([
-                'erro' => 'O campo nome é obrigatório.',
-            ], 400);
-        }
-
-        $indicador = new Indicador();
-        $indicador->setNome($dados['nome']);
-        $indicador->setDescricao($dados['descricao'] ?? null);
-        $indicador->setUnidade($dados['unidade'] ?? null);
-
-        if (array_key_exists('valor', $dados) && $dados['valor'] !== null && $dados['valor'] !== '') {
-            $indicador->setValor((float) $dados['valor']);
-        }
-
-       if (!empty($dados['anoReferencia'])) {
-    $indicador->setAnoReferencia((int) $dados['anoReferencia']);
-        }
-
-        if (!empty($dados['projetoId'])) {
-            $projeto = $projetoRepository->find($dados['projetoId']);
-
-            if (!$projeto) {
-                return $this->json([
-                    'erro' => 'Projeto não encontrado.',
-                ], 404);
-            }
-
-            $indicador->setProjeto($projeto);
-        }
-
-        $entityManager->persist($indicador);
-        $entityManager->flush();
-
-        return $this->json([
-            'id' => $indicador->getId(),
-            'nome' => $indicador->getNome(),
-            'descricao' => $indicador->getDescricao(),
-            'unidade' => $indicador->getUnidade(),
-            'valor' => $indicador->getValor(),
-            'anoReferencia' => $indicador->getAnoReferencia(),
-            'projetoId' => $indicador->getProjeto()?->getId(),
-        ], 201);
-    }
+    #[Route('',name:'api_indicador_index',methods:['GET'])]public function index(IndicadorRepository $r):JsonResponse{return $this->json(array_map($this->normalize(...),$r->findBy([],['nome'=>'ASC'])));}
+    #[Route('/{id}',name:'api_indicador_show',methods:['GET'])]public function show(Indicador $i):JsonResponse{return $this->json($this->normalize($i));}
+    #[Route('',name:'api_indicador_create',methods:['POST'])]public function create(Request $r,ProjetoRepository $pr,EntityManagerInterface $em):JsonResponse{$i=new Indicador();$e=$this->fill($i,$this->payload($r),$pr);if($e)return$e;$em->persist($i);$em->flush();return$this->json($this->normalize($i),201);}
+    #[Route('/{id}',name:'api_indicador_update',methods:['PUT','PATCH'])]public function update(Indicador $i,Request $r,ProjetoRepository $pr,EntityManagerInterface $em):JsonResponse{$e=$this->fill($i,$this->payload($r),$pr);if($e)return$e;$em->flush();return$this->json($this->normalize($i));}
+    #[Route('/{id}',name:'api_indicador_delete',methods:['DELETE'])]public function delete(Indicador $i,EntityManagerInterface $em):JsonResponse{$em->remove($i);$em->flush();return new JsonResponse(null,204);}
+    private function payload(Request $r):array{try{return$r->toArray();}catch(\Throwable){return[];}}
+    private function fill(Indicador $i,array $d,ProjetoRepository $repo):?JsonResponse{if(isset($d['nome']))$i->setNome(trim((string)$d['nome']));if(!$i->getNome())return$this->json(['erro'=>'Dados inválidos.','violacoes'=>['nome'=>'O nome é obrigatório.']],422);foreach(['descricao','unidade']as$f)if(array_key_exists($f,$d)){$s='set'.ucfirst($f);$i->$s($d[$f]!==''?$d[$f]:null);}if(array_key_exists('valor',$d))$i->setValor($d['valor']!==null&&$d['valor']!==''?(float)$d['valor']:null);if(array_key_exists('anoReferencia',$d))$i->setAnoReferencia($d['anoReferencia']?(int)$d['anoReferencia']:null);if(array_key_exists('projetoId',$d)){$p=$d['projetoId']?$repo->find($d['projetoId']):null;if($d['projetoId']&&!$p)return$this->json(['erro'=>'Projeto não encontrado.'],404);$i->setProjeto($p);}return null;}
+    private function normalize(Indicador $i):array{return['id'=>$i->getId(),'nome'=>$i->getNome(),'descricao'=>$i->getDescricao(),'unidade'=>$i->getUnidade(),'valor'=>$i->getValor(),'anoReferencia'=>$i->getAnoReferencia(),'projeto'=>$i->getProjeto()?['id'=>$i->getProjeto()->getId(),'titulo'=>$i->getProjeto()->getTitulo()]:null];}
 }

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controller\Api;
 
 use App\Entity\Projeto;
@@ -14,80 +13,17 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/api/projetos')]
 final class ProjetoController extends AbstractController
 {
-    #[Route('', name: 'api_projeto_index', methods: ['GET'])]
-    public function index(ProjetoRepository $projetoRepository): JsonResponse
-    {
-        $projetos = $projetoRepository->findAll();
-
-        $dados = array_map(function (Projeto $projeto) {
-            return [
-                'id' => $projeto->getId(),
-                'titulo' => $projeto->getTitulo(),
-                'resumo' => $projeto->getResumo(),
-                'status' => $projeto->getStatus(),
-                'dataInicio' => $projeto->getDataInicio()?->format('Y-m-d'),
-                'dataFim' => $projeto->getDataFim()?->format('Y-m-d'),
-                'instituicao' => $projeto->getInstituicao() ? [
-                    'id' => $projeto->getInstituicao()->getId(),
-                    'nome' => $projeto->getInstituicao()->getNome(),
-                    'sigla' => $projeto->getInstituicao()->getSigla(),
-                ] : null,
-            ];
-        }, $projetos);
-
-        return $this->json($dados);
-    }
-
-    #[Route('', name: 'api_projeto_create', methods: ['POST'])]
-    public function create(
-        Request $request,
-        EntityManagerInterface $entityManager,
-        InstituicaoRepository $instituicaoRepository
-    ): JsonResponse {
-        $dados = json_decode($request->getContent(), true);
-
-        if (!is_array($dados) || empty($dados['titulo'])) {
-            return $this->json([
-                'erro' => 'O campo titulo é obrigatório.',
-            ], 400);
-        }
-
-        $projeto = new Projeto();
-        $projeto->setTitulo($dados['titulo']);
-        $projeto->setResumo($dados['resumo'] ?? null);
-        $projeto->setStatus($dados['status'] ?? null);
-
-        if (!empty($dados['dataInicio'])) {
-            $projeto->setDataInicio(new \DateTimeImmutable($dados['dataInicio']));
-        }
-
-        if (!empty($dados['dataFim'])) {
-            $projeto->setDataFim(new \DateTimeImmutable($dados['dataFim']));
-        }
-
-        if (!empty($dados['instituicaoId'])) {
-            $instituicao = $instituicaoRepository->find($dados['instituicaoId']);
-
-            if (!$instituicao) {
-                return $this->json([
-                    'erro' => 'Instituicao não encontrada.',
-                ], 404);
-            }
-
-            $projeto->setInstituicao($instituicao);
-        }
-
-        $entityManager->persist($projeto);
-        $entityManager->flush();
-
-        return $this->json([
-            'id' => $projeto->getId(),
-            'titulo' => $projeto->getTitulo(),
-            'resumo' => $projeto->getResumo(),
-            'status' => $projeto->getStatus(),
-            'dataInicio' => $projeto->getDataInicio()?->format('Y-m-d'),
-            'dataFim' => $projeto->getDataFim()?->format('Y-m-d'),
-            'instituicaoId' => $projeto->getInstituicao()?->getId(),
-        ], 201);
-    }
+    #[Route('', name:'api_projeto_index', methods:['GET'])]
+    public function index(ProjetoRepository $repo): JsonResponse { return $this->json(array_map($this->normalize(...), $repo->findBy([], ['titulo'=>'ASC']))); }
+    #[Route('/{id}', name:'api_projeto_show', methods:['GET'])]
+    public function show(Projeto $item): JsonResponse { return $this->json($this->normalize($item)); }
+    #[Route('', name:'api_projeto_create', methods:['POST'])]
+    public function create(Request $request, InstituicaoRepository $instituicoes, EntityManagerInterface $em): JsonResponse { $item=new Projeto(); $error=$this->fill($item,$this->payload($request),$instituicoes); if($error)return $error; $em->persist($item);$em->flush();return $this->json($this->normalize($item),201); }
+    #[Route('/{id}', name:'api_projeto_update', methods:['PUT','PATCH'])]
+    public function update(Projeto $item, Request $request, InstituicaoRepository $instituicoes, EntityManagerInterface $em): JsonResponse { $error=$this->fill($item,$this->payload($request),$instituicoes);if($error)return $error;$em->flush();return $this->json($this->normalize($item)); }
+    #[Route('/{id}', name:'api_projeto_delete', methods:['DELETE'])]
+    public function delete(Projeto $item,EntityManagerInterface $em): JsonResponse {$em->remove($item);$em->flush();return new JsonResponse(null,204);}
+    private function payload(Request $r):array{try{return $r->toArray();}catch(\Throwable){return[];}}
+    private function fill(Projeto $p,array $d,InstituicaoRepository $repo):?JsonResponse{if(isset($d['titulo']))$p->setTitulo(trim((string)$d['titulo']));if(!$p->getTitulo())return $this->json(['erro'=>'Dados inválidos.','violacoes'=>['titulo'=>'O título é obrigatório.']],422);foreach(['resumo','status']as$f)if(array_key_exists($f,$d)){$s='set'.ucfirst($f);$p->$s($d[$f]!==''?$d[$f]:null);}foreach(['dataInicio','dataFim']as$f)if(array_key_exists($f,$d)){try{$s='set'.ucfirst($f);$p->$s($d[$f]?new \DateTimeImmutable($d[$f]):null);}catch(\Throwable){return $this->json(['erro'=>'Data inválida.'],422);}}if(array_key_exists('instituicaoId',$d)){$i=$d['instituicaoId']?$repo->find($d['instituicaoId']):null;if($d['instituicaoId']&&!$i)return $this->json(['erro'=>'Instituição não encontrada.'],404);$p->setInstituicao($i);}return null;}
+    private function normalize(Projeto $p):array{return['id'=>$p->getId(),'titulo'=>$p->getTitulo(),'resumo'=>$p->getResumo(),'status'=>$p->getStatus(),'dataInicio'=>$p->getDataInicio()?->format('Y-m-d'),'dataFim'=>$p->getDataFim()?->format('Y-m-d'),'instituicao'=>$p->getInstituicao()?['id'=>$p->getInstituicao()->getId(),'nome'=>$p->getInstituicao()->getNome(),'sigla'=>$p->getInstituicao()->getSigla()]:null];}
 }

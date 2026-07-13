@@ -1,33 +1,75 @@
+name: observatorio-sertao-digital
+
 services:
+  traefik:
+    image: traefik:v3.7.1
+    container_name: observatorio_traefik
+    restart: unless-stopped
+    command:
+      - --api.dashboard=true
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks: [proxy]
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.traefik.rule=Host(`traefik.observatorio.localhost`)
+      - traefik.http.routers.traefik.service=api@internal
+
   frontend:
-    build:
-      context: ./frontend
+    build: { context: ./frontend }
     container_name: observatorio_frontend
     restart: unless-stopped
     working_dir: /app
     volumes:
       - ./frontend:/app
       - /app/node_modules
-    ports:
-      - "4200:4200"
     depends_on:
-      - backend
+      backend: { condition: service_healthy }
+    networks: [proxy]
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.frontend.rule=Host(`observatorio.localhost`)
+      - traefik.http.routers.frontend.entrypoints=web
+      - traefik.http.services.frontend.loadbalancer.server.port=4200
 
   backend:
-    build:
-      context: ./backend
+    build: { context: ./backend }
     container_name: observatorio_backend
     restart: unless-stopped
     working_dir: /app
     volumes:
       - ./backend:/app
-    ports:
-      - "8000:8000"
+      - backend_var:/app/var
     environment:
-      DATABASE_URL: "postgresql://observatorio:observatorio@database:5432/observatorio?serverVersion=17&charset=utf8"
+      APP_SECRET: ${APP_SECRET:-troque-esta-chave-em-producao}
+      DATABASE_URL: postgresql://observatorio:observatorio@database:5432/observatorio?serverVersion=17&charset=utf8
+      DEFAULT_URI: http://admin.observatorio.localhost
     depends_on:
+      database: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "php", "-r", "$$s=@fsockopen('127.0.0.1',8000); exit($$s?0:1);"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 15s
+    networks: [proxy, data]
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=observatorio_proxy
+      - traefik.http.routers.backend-api.rule=Host(`observatorio.localhost`) && PathPrefix(`/api`)
+      - traefik.http.routers.backend-api.priority=100
+      - traefik.http.routers.backend-api.entrypoints=web
+      - traefik.http.routers.backend-direct.rule=Host(`api.observatorio.localhost`)
+      - traefik.http.routers.backend-direct.entrypoints=web
+      - traefik.http.routers.backend-admin.rule=Host(`admin.observatorio.localhost`)
+      - traefik.http.routers.backend-admin.entrypoints=web
+      - traefik.http.services.backend.loadbalancer.server.port=8000
 
-      - database
   database:
     image: postgres:17-alpine
     container_name: observatorio_database
@@ -36,10 +78,13 @@ services:
       POSTGRES_DB: observatorio
       POSTGRES_USER: observatorio
       POSTGRES_PASSWORD: observatorio
-    ports:
-      - "5432:5432"
-    volumes:
-      - database_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U observatorio -d observatorio"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes: [database_data:/var/lib/postgresql/data]
+    networks: [data]
 
   meilisearch:
     image: getmeili/meilisearch:v1.12
@@ -48,11 +93,22 @@ services:
     environment:
       MEILI_ENV: development
       MEILI_MASTER_KEY: observatorio_master_key
-    ports:
-      - "7700:7700"
-    volumes:
-      - meilisearch_data:/meili_data
+    volumes: [meilisearch_data:/meili_data]
+    networks: [proxy, data]
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=observatorio_proxy
+      - traefik.http.routers.meilisearch.rule=Host(`busca.observatorio.localhost`)
+      - traefik.http.routers.meilisearch.entrypoints=web
+      - traefik.http.services.meilisearch.loadbalancer.server.port=7700
+
+networks:
+  proxy:
+    name: observatorio_proxy
+  data:
+    name: observatorio_data
 
 volumes:
+  backend_var:
   database_data:
   meilisearch_data:

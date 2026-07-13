@@ -1,0 +1,7 @@
+{% extends 'admin/layout.html.twig' %}
+{% block title %}Administração{% endblock %}
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-4"><div><h1>Backend do Observatório</h1><p class="lead">Tratamento, manutenção e correção dos dados do Sertão Digital.</p></div><a class="btn btn-primary" href="{{ path('admin_post_new') }}"><twig:ux:icon name="tabler:message"/> Novo aviso</a></div>
+<div class="row g-3 mb-4">{% for nome,total in contagens %}<div class="col-md-3"><div class="card h-100"><div class="card-body"><h2 class="display-5">{{ total }}</h2><p class="card-text">{{ nome }}</p></div></div></div>{% endfor %}</div>
+<div class="card"><div class="card-header">Acesso rápido</div><div class="list-group list-group-flush"><a class="list-group-item list-group-item-action" href="{{ path('admin_post_index') }}">Central de avisos</a><a class="list-group-item list-group-item-action" href="{{ path('admin_data_index',{tipo:'instituicoes'}) }}">Gerenciar instituições</a><a class="list-group-item list-group-item-action" href="{{ path('admin_data_index',{tipo:'projetos'}) }}">Gerenciar projetos</a><a class="list-group-item list-group-item-action" href="{{ path('admin_data_index',{tipo:'indicadores'}) }}">Gerenciar indicadores</a></div></div>
+{% endblock %}

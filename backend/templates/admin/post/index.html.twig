@@ -1,0 +1,8 @@
+{% extends 'admin/layout.html.twig' %}
+{% block title %}Central de avisos{% endblock %}
+{% block body %}
+<div class="page-head"><div><p class="eyebrow">COMUNICAÇÃO</p><h1>Central de avisos</h1><p>Avisos internos e comunicados públicos baseados no Post do Symfony Demo.</p></div><a class="primary button" href="{{ path('admin_post_new') }}">Novo aviso</a></div>
+<div class="panel table-wrap"><table><thead><tr><th>Título</th><th>Status</th><th>Visibilidade</th><th>Atualização</th><th></th></tr></thead><tbody>
+{% for post in posts %}<tr><td><strong>{{ post.titulo }}</strong><small>{{ post.resumo }}</small></td><td><span class="badge">{{ post.status }}</span></td><td>{{ post.publico ? 'Público' : 'Interno' }}{{ post.fixado ? ' · Fixado' : '' }}</td><td>{{ post.atualizadoEm|date('d/m/Y H:i') }}</td><td><a href="{{ path('admin_post_edit', {id:post.id}) }}">Editar</a></td></tr>{% else %}<tr><td colspan="5">Nenhum aviso cadastrado.</td></tr>{% endfor %}
+</tbody></table></div>
+{% endblock %}
