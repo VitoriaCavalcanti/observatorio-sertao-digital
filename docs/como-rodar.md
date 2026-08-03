@@ -37,7 +37,7 @@ Abra `http://admin.observatorio.localhost` e entre com o administrador criado. O
 docker compose logs -f backend
 docker compose exec backend php bin/console debug:router
 docker compose exec backend php bin/phpunit
-docker compose exec frontend npm test
+docker compose exec frontend npm test -- --watch=false
 docker compose down
 ```
 
@@ -46,3 +46,5 @@ docker compose down
 ## Variáveis
 
 Defina `APP_SECRET` fora do Compose em ambientes compartilhados ou de produção. Senhas do PostgreSQL, chave do Meilisearch, TLS e proteção do dashboard do Traefik também devem ser externalizados antes de publicar o ambiente.
+
+O Compose inicia o Symfony em `APP_ENV=prod` e `APP_DEBUG=0` por padrão para evitar a forte penalidade de acesso a arquivos dos volumes compartilhados no Docker Desktop para Windows. Para depurar o backend, defina `APP_ENV=dev` e `APP_DEBUG=1` no arquivo `.env` da raiz e recrie o serviço `backend`; esse modo é mais lento, mas habilita profiler e recarregamento detalhado.

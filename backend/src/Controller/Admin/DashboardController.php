@@ -17,6 +17,7 @@ final class DashboardController extends AbstractController
     #[Route('', name: 'admin_dashboard', methods: ['GET'])]
     public function index(InstituicaoRepository $instituicoes, ProjetoRepository $projetos, IndicadorRepository $indicadores, PostRepository $posts): Response
     {
-        return $this->render('admin/dashboard.html.twig', ['contagens' => ['Instituições' => $instituicoes->count(), 'Projetos' => $projetos->count(), 'Indicadores' => $indicadores->count(), 'Avisos' => $posts->count()]]);
+        $pendentes = $instituicoes->count(['statusCadastro' => 'em_analise']) + $projetos->count(['statusCadastro' => 'em_analise']) + $indicadores->count(['statusCadastro' => 'em_analise']);
+        return $this->render('admin/dashboard.html.twig', ['contagens' => ['Instituições' => $instituicoes->count(), 'Projetos' => $projetos->count(), 'Indicadores' => $indicadores->count(), 'Em análise' => $pendentes, 'Avisos' => $posts->count()]]);
     }
 }

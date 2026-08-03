@@ -4,10 +4,12 @@ namespace App\Controller\Admin;
 use App\Entity\Indicador;
 use App\Entity\Instituicao;
 use App\Entity\Projeto;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,6 +60,8 @@ final class DataController extends AbstractController
         if ($item instanceof Instituicao) $builder->add('nome')->add('sigla')->add('tipo')->add('email')->add('site')->add('municipio')->add('uf');
         if ($item instanceof Projeto) $builder->add('titulo')->add('resumo', TextareaType::class, ['required' => false])->add('status')->add('dataInicio', DateType::class, ['required' => false, 'widget' => 'single_text'])->add('dataFim', DateType::class, ['required' => false, 'widget' => 'single_text'])->add('instituicao', EntityType::class, ['class' => Instituicao::class, 'choice_label' => 'nome', 'required' => false]);
         if ($item instanceof Indicador) $builder->add('nome')->add('descricao', TextareaType::class, ['required' => false])->add('unidade')->add('valor', NumberType::class, ['required' => false])->add('anoReferencia')->add('projeto', EntityType::class, ['class' => Projeto::class, 'choice_label' => 'titulo', 'required' => false]);
+        $builder->add('responsavel', EntityType::class, ['class' => User::class, 'choice_label' => 'email', 'required' => false, 'label' => 'Usuário responsável'])
+            ->add('statusCadastro', ChoiceType::class, ['label' => 'Situação do cadastro', 'choices' => ['Rascunho' => Instituicao::CADASTRO_RASCUNHO, 'Em análise' => Instituicao::CADASTRO_EM_ANALISE, 'Publicado' => Instituicao::CADASTRO_PUBLICADO, 'Devolvido para correção' => Instituicao::CADASTRO_DEVOLVIDO]]);
         $form = $builder->getForm(); $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) { $em->persist($item); $em->flush(); $this->addFlash('success', 'Registro salvo com sucesso.'); return $this->redirectToRoute('admin_data_index', ['tipo' => $tipo]); }
         return $this->render('admin/data/form.html.twig', ['tipo' => $tipo, 'item' => $item, 'form' => $form]);

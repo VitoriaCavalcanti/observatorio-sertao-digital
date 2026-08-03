@@ -5,6 +5,7 @@ O Observatório Sertão Digital centraliza iniciativas, instituições, indicado
 ## Públicos
 
 - Comunidade e pesquisadores consultam o portal Angular.
+- Usuários cadastrados mantêm suas instituições, projetos e indicadores pelo Angular e enviam os dados para análise.
 - Equipes técnicas corrigem e mantêm registros pelo painel Symfony.
 - Editores publicam comunicados pela central de avisos.
 - Administradores controlam operações sensíveis e usuários.
@@ -17,6 +18,8 @@ O Observatório Sertão Digital centraliza iniciativas, instituições, indicado
 - Papéis de usuário, editor e administrador.
 - Central de avisos internos e públicos baseada em Posts.
 - API com leitura pública e escrita protegida.
+- Área do usuário com registro, login, rascunhos próprios e envio para análise.
+- Fluxo de revisão com rascunho, análise, publicação e devolução para correção.
 - Roteamento local por nomes com Traefik.
 
 ## Evoluções previstas

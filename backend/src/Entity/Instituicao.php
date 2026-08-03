@@ -10,6 +10,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: InstituicaoRepository::class)]
 class Instituicao
 {
+    public const CADASTRO_RASCUNHO = 'rascunho';
+    public const CADASTRO_EM_ANALISE = 'em_analise';
+    public const CADASTRO_PUBLICADO = 'publicado';
+    public const CADASTRO_DEVOLVIDO = 'devolvido';
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -35,6 +39,13 @@ class Instituicao
 
     #[ORM\Column(length: 2, nullable: true)]
     private ?string $uf = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(onDelete: 'SET NULL')]
+    private ?User $responsavel = null;
+
+    #[ORM\Column(length: 20)]
+    private string $statusCadastro = self::CADASTRO_RASCUNHO;
 
     /**
      * @var Collection<int, Projeto>
@@ -135,6 +146,11 @@ class Instituicao
 
         return $this;
     }
+
+    public function getResponsavel(): ?User { return $this->responsavel; }
+    public function setResponsavel(?User $responsavel): static { $this->responsavel = $responsavel; return $this; }
+    public function getStatusCadastro(): string { return $this->statusCadastro; }
+    public function setStatusCadastro(string $status): static { $this->statusCadastro = $status; return $this; }
 
     /**
      * @return Collection<int, Projeto>

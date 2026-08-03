@@ -11,6 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: ProjetoRepository::class)]
 class Projeto
 {
+    public const CADASTRO_RASCUNHO = 'rascunho';
+    public const CADASTRO_EM_ANALISE = 'em_analise';
+    public const CADASTRO_PUBLICADO = 'publicado';
+    public const CADASTRO_DEVOLVIDO = 'devolvido';
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -33,6 +37,13 @@ class Projeto
 
     #[ORM\ManyToOne(inversedBy: 'projetos')]
     private ?Instituicao $instituicao = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(onDelete: 'SET NULL')]
+    private ?User $responsavel = null;
+
+    #[ORM\Column(length: 20)]
+    private string $statusCadastro = self::CADASTRO_RASCUNHO;
 
     /**
      * @var Collection<int, Indicador>
@@ -122,6 +133,11 @@ class Projeto
         return $this;
     }
 
+    public function getResponsavel(): ?User { return $this->responsavel; }
+    public function setResponsavel(?User $responsavel): static { $this->responsavel = $responsavel; return $this; }
+    public function getStatusCadastro(): string { return $this->statusCadastro; }
+    public function setStatusCadastro(string $status): static { $this->statusCadastro = $status; return $this; }
+
     /**
      * @return Collection<int, Indicador>
      */
@@ -130,22 +146,22 @@ class Projeto
         return $this->indicadores;
     }
 
-    public function addIndicadore(Indicador $indicadore): static
+    public function addIndicador(Indicador $indicador): static
     {
-        if (!$this->indicadores->contains($indicadore)) {
-            $this->indicadores->add($indicadore);
-            $indicadore->setProjeto($this);
+        if (!$this->indicadores->contains($indicador)) {
+            $this->indicadores->add($indicador);
+            $indicador->setProjeto($this);
         }
 
         return $this;
     }
 
-    public function removeIndicadore(Indicador $indicadore): static
+    public function removeIndicador(Indicador $indicador): static
     {
-        if ($this->indicadores->removeElement($indicadore)) {
+        if ($this->indicadores->removeElement($indicador)) {
             // set the owning side to null (unless already changed)
-            if ($indicadore->getProjeto() === $this) {
-                $indicadore->setProjeto(null);
+            if ($indicador->getProjeto() === $this) {
+                $indicador->setProjeto(null);
             }
         }
 

@@ -38,7 +38,11 @@ security:
     access_control:
         - { path: ^/login$, roles: PUBLIC_ACCESS }
         - { path: ^/api/login$, roles: PUBLIC_ACCESS }
+        - { path: ^/api/registro$, roles: PUBLIC_ACCESS }
         - { path: ^/api/me$, roles: ROLE_USER }
+        - { path: ^/api/minha-conta, roles: ROLE_USER }
+        - { path: ^/api/meus-cadastros, roles: ROLE_USER }
+        - { path: ^/api/logout$, roles: ROLE_USER }
         - { path: ^/api, roles: ROLE_EDITOR, methods: [POST, PUT, PATCH, DELETE] }
         - { path: ^/admin, roles: ROLE_EDITOR }
 

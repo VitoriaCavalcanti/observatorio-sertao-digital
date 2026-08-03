@@ -44,11 +44,15 @@ services:
     working_dir: /app
     volumes:
       - ./backend:/app
+      - backend_vendor:/app/vendor
       - backend_var:/app/var
     environment:
+      APP_ENV: ${APP_ENV:-prod}
+      APP_DEBUG: ${APP_DEBUG:-0}
       APP_SECRET: ${APP_SECRET:-troque-esta-chave-em-producao}
       DATABASE_URL: postgresql://observatorio:observatorio@database:5432/observatorio?serverVersion=17&charset=utf8
       DEFAULT_URI: http://admin.observatorio.localhost
+      PHP_CLI_SERVER_WORKERS: 4
     depends_on:
       database: { condition: service_healthy }
     healthcheck:
@@ -109,6 +113,7 @@ networks:
     name: observatorio_data
 
 volumes:
+  backend_vendor:
   backend_var:
   database_data:
   meilisearch_data:

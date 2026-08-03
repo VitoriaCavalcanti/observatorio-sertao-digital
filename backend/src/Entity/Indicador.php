@@ -9,6 +9,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: IndicadorRepository::class)]
 class Indicador
 {
+    public const CADASTRO_RASCUNHO = 'rascunho';
+    public const CADASTRO_EM_ANALISE = 'em_analise';
+    public const CADASTRO_PUBLICADO = 'publicado';
+    public const CADASTRO_DEVOLVIDO = 'devolvido';
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -31,6 +35,13 @@ class Indicador
 
     #[ORM\ManyToOne(inversedBy: 'indicadores')]
     private ?Projeto $projeto = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(onDelete: 'SET NULL')]
+    private ?User $responsavel = null;
+
+    #[ORM\Column(length: 20)]
+    private string $statusCadastro = self::CADASTRO_RASCUNHO;
 
     public function getId(): ?int
     {
@@ -108,4 +119,9 @@ class Indicador
 
         return $this;
     }
+
+    public function getResponsavel(): ?User { return $this->responsavel; }
+    public function setResponsavel(?User $responsavel): static { $this->responsavel = $responsavel; return $this; }
+    public function getStatusCadastro(): string { return $this->statusCadastro; }
+    public function setStatusCadastro(string $status): static { $this->statusCadastro = $status; return $this; }
 }

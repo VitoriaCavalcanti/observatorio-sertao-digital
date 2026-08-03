@@ -1,14 +1,21 @@
-<main class="page">
-  <header class="hero"><p class="eyebrow">Observatório Sertão Digital</p><h1>Painel inicial</h1><p>Visão geral das instituições, projetos e indicadores publicados na plataforma.</p></header>
-  @if (carregando()) {<section class="status-card"><p>Carregando dados...</p></section>}
-  @else if (erro()) {<section class="status-card error"><p>{{ erro() }}</p></section>}
-  @else {
-    @if (avisos().length) {<section class="content-card"><p class="section-label">Comunicados</p><h2>Avisos do Observatório</h2><ul>@for (aviso of avisos(); track aviso.id) {<li><strong>{{ aviso.fixado ? '📌 ' : '' }}{{ aviso.titulo }}</strong><span>{{ aviso.resumo }}</span></li>}</ul></section>}
-    <section class="summary-grid"><article class="summary-card"><span>Instituições</span><strong>{{ instituicoes().length }}</strong></article><article class="summary-card"><span>Projetos</span><strong>{{ projetos().length }}</strong></article><article class="summary-card"><span>Indicadores</span><strong>{{ indicadores().length }}</strong></article></section>
-    <section class="content-grid">
-      <article class="content-card"><h2>Instituições</h2><ul>@for (item of instituicoes(); track item.id) {<li><strong>{{ item.nome }}</strong><span>{{ item.sigla || 'Sem sigla' }} @if (item.municipio || item.uf) { · {{ item.municipio }} {{ item.uf }}}</span></li>} @empty {<li>Nenhuma instituição publicada.</li>}</ul></article>
-      <article class="content-card"><h2>Projetos</h2><ul>@for (item of projetos(); track item.id) {<li><strong>{{ item.titulo }}</strong><span>{{ item.status || 'Sem status' }}</span></li>} @empty {<li>Nenhum projeto publicado.</li>}</ul></article>
-      <article class="content-card"><h2>Indicadores</h2><ul>@for (item of indicadores(); track item.id) {<li><strong>{{ item.nome }}</strong><span>{{ item.valor }} {{ item.unidade }} @if (item.anoReferencia) { · {{ item.anoReferencia }}}</span></li>} @empty {<li>Nenhum indicador publicado.</li>}</ul></article>
-    </section>
-  }
-</main>
+<header class="site-header">
+  <a class="brand" routerLink="/" aria-label="Página inicial do Observatório Sertão Digital">
+    <span class="brand-mark">OS</span>
+    <span>Observatório<br />Sertão Digital</span>
+  </a>
+  <nav aria-label="Navegação principal">
+    <a routerLink="/instituicoes" routerLinkActive="active">Instituições</a>
+    <a routerLink="/projetos" routerLinkActive="active">Projetos</a>
+    <a routerLink="/indicadores" routerLinkActive="active">Indicadores</a>
+    <a routerLink="/avisos" routerLinkActive="active">Avisos</a>
+    <a routerLink="/busca" routerLinkActive="active">Buscar</a>
+    <a class="search-link" [routerLink]="auth.usuario() ? '/minha-area' : '/entrar'" routerLinkActive="active">{{ auth.usuario() ? 'Minha área' : 'Entrar' }}</a>
+  </nav>
+</header>
+
+<router-outlet />
+
+<footer class="site-footer">
+  <p>Observatório Sertão Digital — conhecimento aberto sobre o ecossistema digital do Sertão.</p>
+  <a href="http://admin.observatorio.localhost">Área administrativa</a>
+</footer>

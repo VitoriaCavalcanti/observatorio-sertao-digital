@@ -1,6 +1,6 @@
 # Observatório Sertão Digital
 
-Plataforma para reunir, revisar e publicar instituições, projetos, indicadores e avisos relacionados ao ecossistema digital do Sertão.
+Plataforma para reunir, revisar e publicar instituições, projetos, indicadores e avisos relacionados ao ecossistema digital do Sertão. O Angular oferece consulta pública e uma área na qual cada usuário mantém os próprios cadastros. O Symfony é o gerenciador interno usado pela equipe do Sertão Digital para revisar, publicar e corrigir os dados.
 
 ## Aplicações
 

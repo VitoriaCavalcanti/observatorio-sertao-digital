@@ -21,3 +21,5 @@ Não registre senhas reais em documentação, fixtures versionadas ou arquivos `
 ## API
 
 O login JSON usa a mesma entidade e sessão do painel. Em chamadas originadas de outro domínio, o cliente precisa enviar credenciais/cookies e o CORS deve permitir explicitamente a origem. Pelo portal principal, `/api` mantém a mesma origem graças ao Traefik.
+
+Usuários com `ROLE_USER` acessam somente a própria conta e seus cadastros no Angular. `ROLE_EDITOR` revisa e publica dados pelo Symfony. `ROLE_ADMIN` também administra usuários e executa exclusões.
