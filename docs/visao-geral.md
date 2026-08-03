@@ -20,6 +20,7 @@ O Observatório Sertão Digital centraliza iniciativas, instituições, indicado
 - API com leitura pública e escrita protegida.
 - Área do usuário com registro, login, rascunhos próprios e envio para análise.
 - Fluxo de revisão com rascunho, análise, publicação e devolução para correção.
+- Fila de moderação no Symfony, observações ao usuário e histórico auditável de decisões.
 - Roteamento local por nomes com Traefik.
 
 ## Evoluções previstas

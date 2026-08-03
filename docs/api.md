@@ -32,6 +32,8 @@ Base principal: `http://observatorio.localhost/api`. A API também responde em `
 
 Os tipos aceitos são `instituicoes`, `projetos` e `indicadores`. O servidor verifica a propriedade do registro; um usuário não pode consultar ou alterar cadastros pertencentes a outra conta.
 
+Na resposta da área do usuário, `publicado` informa se existe uma versão pública preservada, `statusCadastro` representa o estado da proposta atual e `observacaoRevisao` contém a orientação deixada pelo revisor. Alterações em registros publicados só substituem a versão pública depois da aprovação no Symfony.
+
 ## Escrita protegida
 
 Os recursos `instituicoes`, `projetos` e `indicadores` aceitam `POST`, `PUT` e `PATCH` para usuários com `ROLE_EDITOR`. Exclusões com `DELETE` exigem `ROLE_ADMIN`. Inclusões retornam `201`; exclusões retornam `204`; dados inválidos retornam `422` com `violacoes` quando aplicável.

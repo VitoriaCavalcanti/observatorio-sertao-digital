@@ -13,6 +13,7 @@ class Indicador
     public const CADASTRO_EM_ANALISE = 'em_analise';
     public const CADASTRO_PUBLICADO = 'publicado';
     public const CADASTRO_DEVOLVIDO = 'devolvido';
+    public const CADASTRO_REJEITADO = 'rejeitado';
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -42,6 +43,15 @@ class Indicador
 
     #[ORM\Column(length: 20)]
     private string $statusCadastro = self::CADASTRO_RASCUNHO;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $dadosPendentes = null;
+
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $situacaoRevisao = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $observacaoRevisao = null;
 
     public function getId(): ?int
     {
@@ -124,4 +134,10 @@ class Indicador
     public function setResponsavel(?User $responsavel): static { $this->responsavel = $responsavel; return $this; }
     public function getStatusCadastro(): string { return $this->statusCadastro; }
     public function setStatusCadastro(string $status): static { $this->statusCadastro = $status; return $this; }
+    public function getDadosPendentes(): ?array { return $this->dadosPendentes; }
+    public function setDadosPendentes(?array $dados): static { $this->dadosPendentes = $dados; return $this; }
+    public function getSituacaoRevisao(): ?string { return $this->situacaoRevisao; }
+    public function setSituacaoRevisao(?string $situacao): static { $this->situacaoRevisao = $situacao; return $this; }
+    public function getObservacaoRevisao(): ?string { return $this->observacaoRevisao; }
+    public function setObservacaoRevisao(?string $observacao): static { $this->observacaoRevisao = $observacao; return $this; }
 }

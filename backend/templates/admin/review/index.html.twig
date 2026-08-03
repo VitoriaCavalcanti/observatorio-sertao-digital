@@ -1,0 +1,8 @@
+{% extends 'admin/layout.html.twig' %}
+{% block title %}Cadastros em análise{% endblock %}
+{% block body %}
+<div class="page-head"><div><p class="eyebrow">MODERAÇÃO</p><h1>Cadastros em análise</h1><p>Revise inclusões e alterações enviadas pelos usuários.</p></div></div>
+<div class="panel table-wrap"><table><thead><tr><th>Tipo</th><th>Cadastro</th><th>Responsável</th><th>Envio</th><th></th></tr></thead><tbody>
+{% for row in pendentes %}<tr><td>{{ row.tipo|capitalize }}</td><td><strong>{{ row.nome }}</strong></td><td>{{ row.item.responsavel ? row.item.responsavel.email : 'Equipe interna' }}</td><td>{{ row.alteracao ? 'Alteração de registro publicado' : 'Novo cadastro' }}</td><td><a href="{{ path('admin_review_show',{tipo:row.tipo,id:row.item.id}) }}">Revisar</a></td></tr>{% else %}<tr><td colspan="5">Não há cadastros aguardando análise.</td></tr>{% endfor %}
+</tbody></table></div>
+{% endblock %}

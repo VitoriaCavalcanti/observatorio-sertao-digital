@@ -51,4 +51,6 @@ O Symfony Demo é a base navegável do backend, incluindo homepage, herança de 
 3. Envia o cadastro para análise e ele fica bloqueado para edição.
 4. A equipe revisa no Symfony e publica ou devolve para correção.
 5. Apenas registros com situação `publicado` aparecem nas APIs e páginas públicas.
+
+Quando o usuário altera um registro já publicado, os novos valores são armazenados em `dadosPendentes`. A versão publicada continua disponível até a aprovação. Cada criação, edição, envio e decisão gera um registro em `CadastroHistorico`, com usuário, revisor, data, dados e observação.
 - `Tag` classifica avisos e permite evolução da central.

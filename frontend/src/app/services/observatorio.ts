@@ -2,10 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-export type StatusCadastro = 'rascunho' | 'em_analise' | 'publicado' | 'devolvido';
-export interface Instituicao { id: number; nome: string; sigla?: string | null; tipo?: string | null; email?: string | null; site?: string | null; municipio?: string | null; uf?: string | null; statusCadastro?: StatusCadastro; }
-export interface Projeto { id: number; titulo: string; resumo?: string | null; status?: string | null; dataInicio?: string | null; dataFim?: string | null; instituicao?: { id: number; nome: string; sigla?: string | null } | null; instituicaoId?: number | null; statusCadastro?: StatusCadastro; }
-export interface Indicador { id: number; nome: string; descricao?: string | null; unidade?: string | null; valor?: number | null; anoReferencia?: number | null; projeto?: { id: number; titulo: string } | null; projetoId?: number | null; statusCadastro?: StatusCadastro; }
+export type StatusCadastro = 'rascunho' | 'em_analise' | 'publicado' | 'devolvido' | 'rejeitado';
+interface ControleCadastro { statusCadastro?: StatusCadastro; publicado?: boolean; observacaoRevisao?: string | null; }
+export interface Instituicao extends ControleCadastro { id: number; nome: string; sigla?: string | null; tipo?: string | null; email?: string | null; site?: string | null; municipio?: string | null; uf?: string | null; }
+export interface Projeto extends ControleCadastro { id: number; titulo: string; resumo?: string | null; status?: string | null; dataInicio?: string | null; dataFim?: string | null; instituicao?: { id: number; nome: string; sigla?: string | null } | null; instituicaoId?: number | null; }
+export interface Indicador extends ControleCadastro { id: number; nome: string; descricao?: string | null; unidade?: string | null; valor?: number | null; anoReferencia?: number | null; projeto?: { id: number; titulo: string } | null; projetoId?: number | null; }
 export interface Aviso { id: number; titulo: string; slug: string; resumo: string; conteudo?: string | null; fixado: boolean; prioridade: number; publicadoEm?: string | null; autor?: string | null; }
 export type Recurso = Instituicao | Projeto | Indicador | Aviso;
 export interface Usuario { id: number; nome: string; email: string; roles: string[]; }

@@ -80,6 +80,8 @@ h3 { font-size: 1.25rem; margin: 12px 0 8px; }
 .record-actions { display: flex; gap: 8px; }
 .record-actions button { background: var(--surface-alt); border: 1px solid var(--border); border-radius: 7px; color: var(--primary); cursor: pointer; font-weight: 750; padding: 8px 10px; }
 .record-actions button:disabled, button:disabled { cursor: not-allowed; opacity: .5; }
+.published-note { color: var(--primary); display: block; font-weight: 750; margin-top: 6px; }
+.review-note { background: #fff7e8; border-left: 3px solid var(--accent); color: #654915; margin: 10px 0 0; padding: 9px 11px; }
 
 @media (max-width: 1220px) { .page { padding-inline: 24px; } }
 @media (max-width: 800px) {
